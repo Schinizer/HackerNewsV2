@@ -6,6 +6,7 @@ buildscript {
         room_version = "2.4.2"
         hilt_version = "2.39.1"
         retrofit_version = "2.9.0"
+        epoxy_version = "5.0.0-beta05"
     }
 
     repositories {
