@@ -9,10 +9,6 @@ buildscript {
         epoxy_version = "5.0.0-beta05"
     }
 
-    repositories {
-        google()
-    }
-
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
