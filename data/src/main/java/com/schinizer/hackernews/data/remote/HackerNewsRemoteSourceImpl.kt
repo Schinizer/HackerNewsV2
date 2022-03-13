@@ -32,4 +32,8 @@ class HackerNewsRemoteSourceImpl @Inject constructor(
             .awaitAll()
             .filterNotNull()
     }
+
+    override suspend fun fetchItem(id: Int): Item? {
+        return hackerNewsAPI.fetchItem(id)
+    }
 }

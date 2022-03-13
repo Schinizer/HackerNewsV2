@@ -8,14 +8,14 @@ import com.schinizer.hackernews.data.local.room.TopStoryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityComponent::class)
-class DBModule {
-    private val dbName = "hackernews-db"
+@InstallIn(SingletonComponent::class)
+object DBModule {
+    private const val dbName = "hackernews-db"
 
     @Provides
     @Singleton
@@ -24,6 +24,7 @@ class DBModule {
         HackerNewsDB::class.java,
         dbName
     )
+        .fallbackToDestructiveMigration()
         .build()
 
     @Provides

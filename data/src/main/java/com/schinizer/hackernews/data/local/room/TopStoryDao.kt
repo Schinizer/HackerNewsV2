@@ -10,7 +10,7 @@ interface TopStoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveItems(entities: List<TopStoryEntity>)
 
-    @Query("SELECT * FROM topstory LIMIT :limit OFFSET :offset")
+    @Query("SELECT * FROM topstory ORDER BY `index` ASC LIMIT :limit OFFSET :offset")
     suspend fun topStories(limit: Int, offset: Int): List<TopStoryEntity>
 
     @Query("DELETE FROM topstory")

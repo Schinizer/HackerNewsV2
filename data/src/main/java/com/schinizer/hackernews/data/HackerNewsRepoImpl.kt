@@ -18,4 +18,14 @@ class HackerNewsRepoImpl @Inject constructor(
             .takeIf { it.isNotEmpty() }
             ?.also { local.saveItems(it) } ?: local.fetchItems(ids)
     }
+
+    override suspend fun fetchItem(id: Int): Item? {
+        return try {
+            remote.fetchItem(id)
+                ?.also { local.saveItem(it) }
+        }
+        catch (e: Exception) {
+            local.fetchItem(id)
+        }
+    }
 }

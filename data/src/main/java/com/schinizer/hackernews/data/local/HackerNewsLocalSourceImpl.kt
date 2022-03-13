@@ -14,18 +14,18 @@ class HackerNewsLocalSourceImpl @Inject constructor(
     private val itemEntityDao: ItemEntityDao
 ): HackerNewsLocalSource {
     override suspend fun top500Stories(): List<Int> {
-        return topStoryDao.topStories(0, 500)
+        return topStoryDao.topStories(500, 0)
             .map { it.id }
     }
 
     override suspend fun saveTop500Stories(ids: List<Int>) {
         topStoryDao.dropAll()
-        topStoryDao.saveItems(ids.map { TopStoryEntity(it) })
+        topStoryDao.saveItems(ids.mapIndexed { index, i -> TopStoryEntity(i, index) })
     }
 
-    override suspend fun fetchItem(id: Int): Item {
+    override suspend fun fetchItem(id: Int): Item? {
         return itemEntityDao.queryItem(id)
-            .toItem()
+            ?.toItem()
     }
 
     override suspend fun fetchItems(ids: List<Int>): List<Item> {
@@ -35,5 +35,10 @@ class HackerNewsLocalSourceImpl @Inject constructor(
 
     override suspend fun saveItems(items: List<Item>) {
         itemEntityDao.saveItems(items.mapNotNull { it.toEntity() })
+    }
+
+    override suspend fun saveItem(item: Item) {
+        item.toEntity()
+            ?.let {  itemEntityDao.saveItem(it) }
     }
 }

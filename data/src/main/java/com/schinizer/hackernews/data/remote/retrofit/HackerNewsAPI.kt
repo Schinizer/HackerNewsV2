@@ -5,9 +5,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface HackerNewsAPI {
-    @GET("/topstories")
+    @GET("topstories.json")
     suspend fun top500Stories(): List<Int>
 
-    @GET("/item/{id}")
-    suspend fun fetchItem(@Path("id") id: Int): Item
+    @GET("item/{id}.json")
+    suspend fun fetchItem(@Path("id") id: Int): Item?
 }

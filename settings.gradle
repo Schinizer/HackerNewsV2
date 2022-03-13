@@ -17,3 +17,4 @@ rootProject.name = "HackerNewsV2"
 include ':app'
 include ':data'
 include ':ui'
+include ':business'

@@ -22,15 +22,28 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        app:swipeRefreshLayoutProgressSpinnerBackgroundColor="?attr/colorPrimary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <com.airbnb.epoxy.EpoxyRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
+            android:scrollbars="vertical"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/layout_item_view"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        android:tooltipText="Scroll to top"
+        app:srcCompat="@drawable/ic_baseline_arrow_upward_24"
+        tools:targetApi="o" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

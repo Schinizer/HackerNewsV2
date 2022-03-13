@@ -4,9 +4,11 @@ buildscript {
         moshi_version = "1.13.0"
         moshix_version = "0.17.1"
         room_version = "2.4.2"
-        hilt_version = "2.39.1"
+        hilt_version = "2.41"
         retrofit_version = "2.9.0"
+        okhttp_version = "4.9.3"
         epoxy_version = "5.0.0-beta05"
+        flipper_version = "0.138.0"
     }
 
     dependencies {
