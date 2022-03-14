@@ -87,6 +87,8 @@ class MainActivity : AppCompatActivity() {
                     }
             }
         }
+
+        viewModel.refreshData()
     }
 
     private fun openInChrome(url: String) {

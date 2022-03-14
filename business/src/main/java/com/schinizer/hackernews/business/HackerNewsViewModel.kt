@@ -1,5 +1,6 @@
 package com.schinizer.hackernews.business
 
+import androidx.annotation.VisibleForTesting
 import androidx.collection.LruCache
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,9 +22,12 @@ class HackerNewsViewModel @Inject constructor(
     private val repo: HackerNewsRepository,
     @DispatcherModule.IO private val io: CoroutineDispatcher
 ): ViewModel() {
-    private val data = LruCache<Int, Item>(500)
-    private val jobPool = mutableMapOf<Int, Job>()
-    private val itemOrder = mutableListOf<Int>()
+    @get:VisibleForTesting
+    internal val data = LruCache<Int, Item>(500)
+    @get:VisibleForTesting
+    internal val jobPool = mutableMapOf<Int, Job>()
+    @get:VisibleForTesting
+    internal val itemOrder = mutableListOf<Int>()
 
     // State flow to represent UI State
     private val _dataFlow = MutableStateFlow<List<ItemState>>(emptyList())
@@ -36,10 +40,6 @@ class HackerNewsViewModel @Inject constructor(
     // State flow to signal SwipeRefreshLayout
     private val _isLoading = MutableStateFlow(false)
     val isLoadingFlow = _isLoading.asSharedFlow()
-
-    init {
-        refreshData()
-    }
 
     // Refreshes data ceremony:
     // 1: Clear job pool and existing jobs
@@ -85,13 +85,13 @@ class HackerNewsViewModel @Inject constructor(
             when(item) {
                 is Item.Story -> {
                     val openBrowser = item.url?.let { OpenBrowser(it) }
-                    viewModelScope.launch {
+                    viewModelScope.launch(io) {
                         _action.emit(openBrowser ?: ShowUnsupportedSnackBar)
                     }
                     return
 
                 }
-                else -> viewModelScope.launch {
+                else -> viewModelScope.launch(io) {
                     _action.emit(ShowUnsupportedSnackBar)
                 }
             }
