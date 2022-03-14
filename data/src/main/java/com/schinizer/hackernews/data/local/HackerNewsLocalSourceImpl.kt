@@ -18,6 +18,8 @@ class HackerNewsLocalSourceImpl @Inject constructor(
             .map { it.id }
     }
 
+    // To save the stories ids, it is safe to drop the stale ones (i.e everything)
+    // Here we write the id & order into the DB
     override suspend fun saveTop500Stories(ids: List<Int>) {
         topStoryDao.dropAll()
         topStoryDao.saveItems(ids.mapIndexed { index, i -> TopStoryEntity(i, index) })
@@ -26,11 +28,6 @@ class HackerNewsLocalSourceImpl @Inject constructor(
     override suspend fun fetchItem(id: Int): Item? {
         return itemEntityDao.queryItem(id)
             ?.toItem()
-    }
-
-    override suspend fun fetchItems(ids: List<Int>): List<Item> {
-        val data = itemEntityDao.queryItems(ids).associateBy { it.id }
-        return ids.map { data[it]?.toItem() ?: Item.Unsupported }
     }
 
     override suspend fun saveItems(items: List<Item>) {

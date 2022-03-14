@@ -4,6 +4,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.schinizer.hackernews.ui.databinding.LayoutItemViewBinding
 import com.schinizer.hackernews.ui.helpers.ViewBindingEpoxyModelWithHolder
+import com.schinizer.hackernews.ui.helpers.ViewBindingHolder
 
 @EpoxyModelClass
 abstract class ItemViewEpoxyModel : ViewBindingEpoxyModelWithHolder<LayoutItemViewBinding>() {
@@ -11,6 +12,10 @@ abstract class ItemViewEpoxyModel : ViewBindingEpoxyModelWithHolder<LayoutItemVi
     @EpoxyAttribute var title: String? = null
     @EpoxyAttribute var subtitle: String? = null
 
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onAttached: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onDetached: (() -> Unit)? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onClick: (() -> Unit)? = null
 
@@ -29,5 +34,13 @@ abstract class ItemViewEpoxyModel : ViewBindingEpoxyModelWithHolder<LayoutItemVi
     override fun LayoutItemViewBinding.unbind() {
         // Don't leak listeners as this view goes back to the view pool
         title.setOnClickListener(null)
+    }
+
+    override fun onViewAttachedToWindow(holder: ViewBindingHolder) {
+        onAttached?.invoke()
+    }
+
+    override fun onViewDetachedFromWindow(holder: ViewBindingHolder) {
+        onDetached?.invoke()
     }
 }

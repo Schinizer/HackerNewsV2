@@ -25,13 +25,15 @@ class HackerNewsViewModel @Inject constructor(
     private val jobPool = mutableMapOf<Int, Job>()
     private val itemOrder = mutableListOf<Int>()
 
+    // State flow to represent UI State
     private val _dataFlow = MutableStateFlow<List<ItemState>>(emptyList())
     val dataFlow = _dataFlow.asStateFlow()
 
+    // Shared Flow to signal android specific actions (Launch intent etc)
     private val _action = MutableSharedFlow<Action>()
     val actionFlow = _action.asSharedFlow()
 
-    // State flow to signal
+    // State flow to signal SwipeRefreshLayout
     private val _isLoading = MutableStateFlow(false)
     val isLoadingFlow = _isLoading.asSharedFlow()
 
@@ -39,9 +41,17 @@ class HackerNewsViewModel @Inject constructor(
         refreshData()
     }
 
+    // Refreshes data ceremony:
+    // 1: Clear job pool and existing jobs
+    // 2: Get fresh top500Stories ids
+    // 3: Update dataFlow
     fun refreshData() {
         viewModelScope.launch(io) {
-            jobPool.clear()
+            with(jobPool) {
+                forEach { (_, job) -> job.cancel() }
+                clear()
+            }
+
             with(itemOrder) {
                 clear()
                 _isLoading.emit(true)
@@ -76,13 +86,13 @@ class HackerNewsViewModel @Inject constructor(
                 is Item.Story -> {
                     val openBrowser = item.url?.let { OpenBrowser(it) }
                     viewModelScope.launch {
-                        _action.emit(openBrowser ?: ShowUnsupportedToast)
+                        _action.emit(openBrowser ?: ShowUnsupportedSnackBar)
                     }
                     return
 
                 }
                 else -> viewModelScope.launch {
-                    _action.emit(ShowUnsupportedToast)
+                    _action.emit(ShowUnsupportedSnackBar)
                 }
             }
         }
@@ -95,6 +105,6 @@ class HackerNewsViewModel @Inject constructor(
 
     sealed interface Action
     data class OpenBrowser(val url: String) : Action
-    object ShowUnsupportedToast : Action
+    object ShowUnsupportedSnackBar : Action
 }
 

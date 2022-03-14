@@ -27,12 +27,8 @@ class ItemEpoxyController(
                 null -> {
                     ItemLoadingEpoxyModel_()
                         .id(id)
-                        .onAttached {
-                            viewModel.loadItem(id)
-                        }
-                        .onDetached {
-                            viewModel.cancelLoadItem(id)
-                        }
+                        .onAttached { viewModel.loadItem(id) }
+                        .onDetached { viewModel.cancelLoadItem(id) }
                         .addTo(this)
                 }
                 is Item.Story -> {
@@ -46,9 +42,7 @@ class ItemEpoxyController(
                         .id(id)
                         .title(item.title)
                         .subtitle("${item.score} points by ${item.by} $timeAgo")
-                        .onClick {
-                            viewModel.openItem(id)
-                        }
+                        .onClick { viewModel.openItem(id) }
                         .addTo(this)
                 }
 

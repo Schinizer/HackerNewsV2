@@ -5,7 +5,6 @@ import com.schinizer.hackernews.data.remote.Item
 interface HackerNewsRepository {
     suspend fun top500Stories(): List<Int>
     suspend fun fetchItem(id: Int): Item?
-    suspend fun fetchItems(ids: List<Int>): List<Item>
 }
 
 interface HackerNewsLocalSource: HackerNewsRepository {

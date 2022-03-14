@@ -1,11 +1,10 @@
 package com.schinizer.hackernews
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -77,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                     .collect {
                         when (it) {
                             is HackerNewsViewModel.OpenBrowser -> openInChrome(it.url)
-                            is HackerNewsViewModel.ShowUnsupportedToast -> Snackbar.make(
+                            is HackerNewsViewModel.ShowUnsupportedSnackBar -> Snackbar.make(
                                 this@MainActivity,
                                 binding.recyclerView,
                                 "No support yet for this item :)",
@@ -91,16 +90,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openInChrome(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            setPackage("com.android.chrome")
-        }
-        try {
-            startActivity(intent)
-        } catch (ex: ActivityNotFoundException) {
-            // Chrome browser presumably not installed so allow user to choose instead
-            intent.setPackage(null)
-            startActivity(intent)
-        }
+        val customTabIntent = CustomTabsIntent.Builder()
+            .build()
+        customTabIntent.launchUrl(this, Uri.parse(url))
     }
 }
