@@ -1,18 +1,20 @@
 package com.schinizer.hackernews.data.dagger
 
 import android.app.Application
-import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.schinizer.hackernews.data.remote.retrofit.HackerNewsAPI
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.ElementsIntoSet
 import okhttp3.Cache
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -31,9 +33,14 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun okhttpClient(httpCache: Cache, flipperInterceptor: FlipperOkhttpInterceptor): OkHttpClient = OkHttpClient.Builder()
+    fun okhttpClient(
+        httpCache: Cache,
+        @NetworkInterceptor networkInterceptors: Set<@JvmSuppressWildcards Interceptor>
+    ): OkHttpClient = OkHttpClient.Builder()
         .cache(httpCache)
-        .addNetworkInterceptor(flipperInterceptor)
+        .apply {
+            networkInterceptors.forEach { addNetworkInterceptor(it) }
+        }
         .build()
 
     @Provides
@@ -50,4 +57,13 @@ object NetworkModule {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
         .create(HackerNewsAPI::class.java)
+
+    @Provides
+    @NetworkInterceptor
+    @ElementsIntoSet
+    fun emptyNetworkInterceptors(): Set<Interceptor> = emptySet()
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class NetworkInterceptor
 }

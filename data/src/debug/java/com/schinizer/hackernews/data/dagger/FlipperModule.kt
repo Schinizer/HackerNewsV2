@@ -6,6 +6,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.ElementsIntoSet
+import okhttp3.Interceptor
 import javax.inject.Singleton
 
 @Module
@@ -17,5 +19,7 @@ object FlipperModule {
 
     @Provides
     @Singleton
-    fun flipperOkhttpInterceptor(plugin: NetworkFlipperPlugin): FlipperOkhttpInterceptor = FlipperOkhttpInterceptor(plugin)
+    @ElementsIntoSet
+    @NetworkModule.NetworkInterceptor
+    fun flipperOkhttpInterceptor(plugin: NetworkFlipperPlugin) = setOf<Interceptor>(FlipperOkhttpInterceptor(plugin))
 }

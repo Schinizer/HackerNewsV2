@@ -13,7 +13,7 @@ import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class HackerNewsApplication: Application() {
+class DebugHackerNewsApplication: Application() {
 
     @Inject
     lateinit var networkPlugin: NetworkFlipperPlugin
@@ -22,11 +22,11 @@ class HackerNewsApplication: Application() {
         super.onCreate()
         SoLoader.init(this, false)
 
-        if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(this)) {
+        if (FlipperUtils.shouldEnableFlipper(this)) {
             val client: FlipperClient = AndroidFlipperClient.getInstance(this)
             with(client) {
-                addPlugin(InspectorFlipperPlugin(this@HackerNewsApplication, DescriptorMapping.withDefaults()))
-                addPlugin(DatabasesFlipperPlugin(this@HackerNewsApplication))
+                addPlugin(InspectorFlipperPlugin(this@DebugHackerNewsApplication, DescriptorMapping.withDefaults()))
+                addPlugin(DatabasesFlipperPlugin(this@DebugHackerNewsApplication))
                 addPlugin(networkPlugin)
                 start()
             }

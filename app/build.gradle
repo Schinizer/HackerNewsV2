@@ -20,7 +20,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+        }
         release {
+            signingConfig signingConfigs.debug
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -63,6 +67,8 @@ dependencies {
     releaseImplementation "com.facebook.flipper:flipper-noop:$flipper"
     debugImplementation "com.facebook.flipper:flipper-network-plugin:$flipper"
     debugImplementation 'com.facebook.soloader:soloader:0.10.3'
+
+    implementation 'com.github.yogacp:android-viewbinding:1.0.4'
 
     testImplementation "junit:junit:$junit"
     androidTestImplementation "androidx.test.ext:junit:1.1.3"
