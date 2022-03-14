@@ -2,6 +2,7 @@ package com.schinizer.hackernews
 
 import android.net.Uri
 import android.os.Bundle
+import android.viewbinding.library.activity.viewBinding
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
@@ -13,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.schinizer.hackernews.business.HackerNewsViewModel
 import com.schinizer.hackernews.data.dagger.DispatcherModule
 import com.schinizer.hackernews.databinding.ActivityMainBinding
-import com.schinizer.hackernews.helpers.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     @DispatcherModule.UI
     lateinit var ui: CoroutineDispatcher
 
-    private val binding by viewBinding(ActivityMainBinding::inflate)
+    private val binding by viewBinding<ActivityMainBinding>()
     private val viewModel by viewModels<HackerNewsViewModel>()
 
     private val controller by lazy { ItemEpoxyController(viewModel) }
