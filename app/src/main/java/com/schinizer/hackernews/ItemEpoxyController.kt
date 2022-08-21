@@ -4,6 +4,7 @@ import android.text.format.DateUtils
 import android.text.format.DateUtils.MINUTE_IN_MILLIS
 import com.airbnb.epoxy.AsyncEpoxyController
 import com.schinizer.hackernews.business.HackerNewsViewModel
+import com.schinizer.hackernews.data.local.ItemState
 import com.schinizer.hackernews.data.remote.Item
 import com.schinizer.hackernews.ui.ItemLoadingEpoxyModel_
 import com.schinizer.hackernews.ui.ItemUnsupportedEpoxyModel_
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit
 class ItemEpoxyController(
     private val viewModel: HackerNewsViewModel
 ) : AsyncEpoxyController() {
-    var data = listOf<HackerNewsViewModel.ItemState>()
+    var data = listOf<ItemState>()
         set(value) {
             field = value
             requestDelayedModelBuild(200)

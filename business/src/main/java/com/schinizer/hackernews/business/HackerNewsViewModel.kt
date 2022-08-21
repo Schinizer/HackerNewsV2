@@ -6,8 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.schinizer.hackernews.data.HackerNewsRepository
 import com.schinizer.hackernews.data.dagger.DispatcherModule
+import com.schinizer.hackernews.data.local.ItemState
 import com.schinizer.hackernews.data.remote.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,7 +34,7 @@ class HackerNewsViewModel @Inject constructor(
     internal val itemOrder = mutableListOf<Int>()
 
     // State flow to represent UI State
-    private val _dataFlow = MutableStateFlow<List<ItemState>>(emptyList())
+    private val _dataFlow = MutableStateFlow<ImmutableList<ItemState>>(persistentListOf())
     val dataFlow = _dataFlow.asStateFlow()
 
     // Shared Flow to signal android specific actions (Launch intent etc)
@@ -57,7 +61,14 @@ class HackerNewsViewModel @Inject constructor(
                 _isLoading.emit(true)
                 addAll(repo.top500Stories())
                 _isLoading.emit(false)
-                _dataFlow.value = itemOrder.map { ItemState(it, data[it]) }
+                _dataFlow.value = itemOrder.map {
+                    ItemState(
+                        id = it,
+                        item = data[it],
+                        onClick = { openItem(it) }
+                    )
+                }
+                    .toImmutableList()
             }
         }
     }
@@ -68,7 +79,14 @@ class HackerNewsViewModel @Inject constructor(
             viewModelScope.launch(io) {
                 repo.fetchItem(id)?.let { data.put(id, it) }
                 jobPool.remove(id)
-                _dataFlow.value = itemOrder.map { ItemState(it, data[it]) }
+                _dataFlow.value = itemOrder.map {
+                    ItemState(
+                        id = it,
+                        item = data[it],
+                        onClick = { openItem(it) }
+                    )
+                }
+                    .toImmutableList()
             }
         }
     }
@@ -97,11 +115,6 @@ class HackerNewsViewModel @Inject constructor(
             }
         }
     }
-
-    data class ItemState(
-        val id: Int,
-        val item: Item?
-    )
 
     sealed interface Action
     data class OpenBrowser(val url: String) : Action

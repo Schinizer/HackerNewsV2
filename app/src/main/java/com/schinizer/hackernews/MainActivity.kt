@@ -3,9 +3,20 @@ package com.schinizer.hackernews
 import android.net.Uri
 import android.os.Bundle
 import android.viewbinding.library.activity.viewBinding
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,12 +25,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.schinizer.hackernews.business.HackerNewsViewModel
 import com.schinizer.hackernews.data.dagger.DispatcherModule
 import com.schinizer.hackernews.databinding.ActivityMainBinding
+import com.schinizer.hackernews.ui.compose.measureCompositionTime
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -36,7 +49,34 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
 
-        with(binding) {
+        setContent {
+            MaterialTheme(
+                colorScheme = darkColorScheme()
+            ) {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        TopAppBar(
+                            title = {
+                                Text(
+                                    text = stringResource(id = R.string.app_name),
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            },
+                        )
+                    }
+                ) { contentPadding ->
+                    ItemViewList(
+                        modifier = Modifier
+                            .padding(contentPadding)
+                            .measureCompositionTime("ItemViewList"),
+                        vm = viewModel
+                    )
+                }
+            }
+        }
+
+        /*with(binding) {
             setContentView(root)
             setSupportActionBar(toolbar)
 
@@ -49,9 +89,9 @@ class MainActivity : AppCompatActivity() {
             fab.setOnClickListener {
                 recyclerView.scrollToPosition(0)
             }
-        }
+        }*/
 
-        lifecycleScope.launch(ui) {
+        /*lifecycleScope.launch(ui) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.dataFlow
                     .collect {
@@ -68,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                         binding.swipeRefreshLayout.isRefreshing = false
                     }
             }
-        }
+        }*/
 
         lifecycleScope.launch(ui) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

@@ -3,11 +3,12 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id "com.google.devtools.ksp"
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
     compileSdk 33
+    namespace "com.schinizer.hackernews"
 
     defaultConfig {
         applicationId "com.schinizer.hackernews"
@@ -26,6 +27,7 @@ android {
         release {
             signingConfig signingConfigs.debug
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -38,6 +40,11 @@ android {
     }
     buildFeatures {
         viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_compiler
     }
 }
 
@@ -45,10 +52,13 @@ dependencies {
     implementation project(":ui")
     implementation project(":data")
     implementation project(":business")
+    implementation project(":compose")
+
+    implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable:$immutable_collection"
 
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.appcompat:appcompat:$appcompat"
-    implementation 'androidx.fragment:fragment-ktx:1.5.2'
+    implementation 'androidx.fragment:fragment-ktx:1.5.3'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
 
     implementation "com.google.android.material:material:$material"
@@ -56,6 +66,21 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.browser:browser:1.4.0"
+
+    implementation "androidx.compose.ui:ui:$compose"
+    // Tooling support (Previews, etc.)
+    implementation "androidx.compose.ui:ui-tooling:$compose"
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation "androidx.compose.foundation:foundation:$compose"
+    // Material Design
+    implementation "androidx.compose.material3:material3:$compose_m3"
+    // Integration with activities
+    implementation "androidx.activity:activity-compose:$activity"
+    // Integration with ViewModels
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+    // Integration with observables
+    implementation "androidx.compose.runtime:runtime-livedata:$compose"
+    implementation "androidx.compose.runtime:runtime-rxjava2:$compose"
 
     implementation "com.airbnb.android:epoxy:$epoxy"
     ksp "com.airbnb.android:epoxy-processor:$epoxy"

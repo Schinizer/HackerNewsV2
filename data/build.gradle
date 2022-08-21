@@ -3,7 +3,7 @@ plugins {
     id "org.jetbrains.kotlin.android"
     id "com.google.devtools.ksp"
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -34,6 +34,14 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_compiler
+    }
+    namespace 'com.schinizer.hackernews.data'
 }
 
 dependencies {
@@ -61,6 +69,8 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    implementation "androidx.compose.runtime:runtime:$compose"
 
     debugImplementation "com.facebook.flipper:flipper:$flipper"
     releaseImplementation "com.facebook.flipper:flipper-noop:$flipper"
