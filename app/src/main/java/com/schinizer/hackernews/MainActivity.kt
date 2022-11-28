@@ -15,8 +15,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -45,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     private val controller by lazy { ItemEpoxyController(viewModel) }
 
+    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
@@ -54,7 +58,14 @@ class MainActivity : AppCompatActivity() {
                 colorScheme = darkColorScheme()
             ) {
                 Scaffold(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .semantics {
+                            // Allows to use testTag() for UiAutomator's resource-id.
+                            // It can be enabled high in the compose hierarchy,
+                            // so that it's enabled for the whole subtree
+                            testTagsAsResourceId = true
+                        },
                     topBar = {
                         TopAppBar(
                             title = {

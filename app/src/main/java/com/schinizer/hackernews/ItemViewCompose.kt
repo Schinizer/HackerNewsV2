@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.schinizer.hackernews.business.HackerNewsViewModel
 import com.schinizer.hackernews.ui.compose.ItemViewListStateless
@@ -16,7 +17,7 @@ fun ItemViewList(
     val itemStates by vm.dataFlow.collectAsState()
 
     ItemViewListStateless(
-        modifier = modifier,
+        modifier = modifier.testTag("ItemViewList"),
         itemStates = itemStates,
         onItemAttached = vm::loadItem,
         onItemDetached = vm::cancelLoadItem,
