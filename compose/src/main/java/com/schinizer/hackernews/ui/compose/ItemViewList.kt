@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListItemInfo
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,11 +35,11 @@ fun ItemViewListStateless(
         modifier = modifier,
         state = lazyColumnState
     ) {
-        items(
+        itemsIndexed(
             items = itemStates,
-            contentType = { it.item },
-            key = { it.id }
-        ) { (_, item, onClick) ->
+            key = { _, item -> item.id },
+            contentType = { _, state -> state.item }
+        ) {  index, (_, item, onClick) ->
             when(item) {
                 null -> {
                     ItemLoading(
@@ -55,15 +55,25 @@ fun ItemViewListStateless(
                         now,
                         DateUtils.MINUTE_IN_MILLIS
                     )
-                    ItemView(
-                        modifier = Modifier
-                            .fillParentMaxWidth()
-                            .animateItemPlacement()
-                            .measureCompositionTime("ItemView"),
-                        title = item.title,
-                        subtitle = "${item.score} points by ${item.by} | $timeAgo",
-                        onClick = onClick
-                    )
+                    when(index % 2 == 0) {
+                        true -> ItemView(
+                            modifier = Modifier
+                                .fillParentMaxWidth()
+                                .animateItemPlacement(),
+                            title = item.title,
+                            subtitle = "${item.score} points by ${item.by} | $timeAgo",
+                            onClick = onClick
+                        )
+                        else -> ItemViewBridge(
+                            modifier = Modifier
+                                .fillParentMaxWidth()
+                                .animateItemPlacement(),
+                            title = item.title,
+                            subtitle = "${item.score} points by ${item.by} | $timeAgo",
+                            onClick = onClick
+                        )
+                    }
+
                 }
                 is Item.Job -> {
                     ItemView(

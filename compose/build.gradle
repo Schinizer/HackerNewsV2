@@ -33,6 +33,7 @@ android {
 
     buildFeatures {
         compose true
+        viewBinding true
     }
 
     composeOptions {
@@ -50,6 +51,7 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose"
     // Tooling support (Previews, etc.)
     implementation "androidx.compose.ui:ui-tooling:$compose"
+    implementation "androidx.compose.ui:ui-viewbinding:$compose"
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
     implementation "androidx.compose.foundation:foundation:$compose"
     // Material Design

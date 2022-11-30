@@ -1,8 +1,9 @@
 package com.schinizer.hackernews.ui.compose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidViewBinding
+import com.schinizer.hackernews.ui.compose.databinding.LayoutItemViewBinding
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
@@ -28,15 +31,11 @@ fun ItemView(
 ) {
     Column(
         modifier = modifier
-            .clickable(
-                onClick = onClick
-            )
+            .clickable(onClick = onClick)
             .padding(all = 16.dp)
-            .height(IntrinsicSize.Min)
     ) {
         Text(
             text = title,
-            overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.titleLarge
         )
@@ -49,6 +48,25 @@ fun ItemView(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ItemViewBridge(
+    modifier: Modifier = Modifier,
+    title: String = "There's no speed limit (2009)",
+    subtitle: String = "250 points by melling | 4 days ago",
+    onClick: () -> Unit = {}
+) {
+    AndroidViewBinding(
+        modifier = modifier
+            .clickable(onClick = onClick),
+        factory = LayoutItemViewBinding::inflate
+    ) {
+        this.title.text = title
+        this.subtitle.text = subtitle
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ItemUnsupported(
     modifier: Modifier = Modifier,
@@ -56,20 +74,21 @@ fun ItemUnsupported(
 ) {
     Text(
         modifier = modifier
-            .padding(all = 16.dp)
-            .height(IntrinsicSize.Min),
+            .padding(all = 16.dp),
         text = title,
         color = MaterialTheme.colorScheme.primary,
         style = MaterialTheme.typography.titleLarge,
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ItemLoading(
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
+            .focusable()
             .padding(all = 16.dp)
     ) {
         val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.View)
@@ -89,23 +108,29 @@ fun ItemLoading(
 @Preview
 @Composable
 fun ItemViewPreview() {
-    ItemView(
-        modifier = Modifier.fillMaxWidth()
-    )
+    MaterialTheme {
+        ItemView(
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Preview
 @Composable
 fun ItemViewUnsupportedPreview() {
-    ItemUnsupported(
-        modifier = Modifier.fillMaxWidth()
-    )
+    MaterialTheme {
+        ItemUnsupported(
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Preview
 @Composable
 fun ItemLoadingPreview() {
-    ItemLoading(
-        modifier = Modifier.fillMaxWidth()
-    )
+    MaterialTheme {
+        ItemLoading(
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
