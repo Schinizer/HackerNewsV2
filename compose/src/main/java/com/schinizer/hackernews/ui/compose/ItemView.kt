@@ -2,7 +2,6 @@ package com.schinizer.hackernews.ui.compose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -88,7 +87,6 @@ fun ItemLoading(
 ) {
     Column(
         modifier = modifier
-            .focusable()
             .padding(all = 16.dp)
     ) {
         val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.View)
