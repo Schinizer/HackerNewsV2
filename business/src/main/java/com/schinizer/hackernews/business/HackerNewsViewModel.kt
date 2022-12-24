@@ -43,7 +43,7 @@ class HackerNewsViewModel @Inject constructor(
 
     // State flow to signal SwipeRefreshLayout
     private val _isLoading = MutableStateFlow(false)
-    val isLoadingFlow = _isLoading.asSharedFlow()
+    val isLoadingFlow = _isLoading.asStateFlow()
 
     // Refreshes data ceremony:
     // 1: Clear job pool and existing jobs

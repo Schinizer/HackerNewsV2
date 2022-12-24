@@ -46,8 +46,6 @@ class MainActivity : AppCompatActivity() {
     private val binding by viewBinding<ActivityMainBinding>()
     private val viewModel by viewModels<HackerNewsViewModel>()
 
-    private val controller by lazy { ItemEpoxyController(viewModel) }
-
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -86,40 +84,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        /*with(binding) {
-            setContentView(root)
-            setSupportActionBar(toolbar)
-
-            recyclerView.setController(controller)
-
-            swipeRefreshLayout.setOnRefreshListener {
-                viewModel.refreshData()
-            }
-
-            fab.setOnClickListener {
-                recyclerView.scrollToPosition(0)
-            }
-        }*/
-
-        /*lifecycleScope.launch(ui) {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.dataFlow
-                    .collect {
-                        controller.data = it
-                    }
-            }
-        }
-
-        lifecycleScope.launch(ui) {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.isLoadingFlow
-                    .collect {
-                        if(it) return@collect
-                        binding.swipeRefreshLayout.isRefreshing = false
-                    }
-            }
-        }*/
 
         lifecycleScope.launch(ui) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

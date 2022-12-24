@@ -15,10 +15,13 @@ fun ItemViewList(
     vm: HackerNewsViewModel = viewModel()
 ) {
     val itemStates by vm.dataFlow.collectAsState()
+    val isLoading by vm.isLoadingFlow.collectAsState()
 
     ItemViewListStateless(
         modifier = modifier.testTag("ItemViewList"),
         itemStates = itemStates,
+        refreshing = isLoading,
+        onRefresh = vm::refreshData,
         onItemAttached = vm::loadItem,
         onItemDetached = vm::cancelLoadItem,
     )
