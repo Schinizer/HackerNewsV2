@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HackerNewsV2</string>
+    <string name="app_name_debug">[DEBUG] HackerNewsV2</string>
 </resources>

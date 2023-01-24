@@ -1,16 +1,20 @@
 # HackerNewsV2
 
-A simple read only HackerNews client built using [Hilt](https://dagger.dev/hilt/), [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html), [Retrofit](https://square.github.io/retrofit/) and [Moshi](https://github.com/square/moshi).
+A simple read only HackerNews client built using [Jetpack Compose](https://developer.android.com/jetpack/compose), [Hilt](https://dagger.dev/hilt/), [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html), [Retrofit](https://square.github.io/retrofit/) and [Moshi](https://github.com/square/moshi).
 
 ## Features
+* Compose UI
+* CI with github actions
 * Multi modules with inverted dependencies
 * MVVM Design Pattern
 * Repository Design Pattern with offline support (Retrofit/Room)
 * Dependency Injection (Dagger/Hilt)
 * Coroutines (suspend functions, StateFlow/SharedFlow)
 * Sealed Interface Deserialization
-* View Bindings
+* Profile-able builds
 * Unit testing
+* Baseline profiles
+* Macro benchmarks
 
 ## Overview
 
@@ -28,7 +32,7 @@ to build and install the project to connected devices.
 
 ## License
 ```
-Copyright 2021 Schinizer
+Copyright 2021-2023 Schinizer
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

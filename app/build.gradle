@@ -1,13 +1,14 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id "com.google.devtools.ksp"
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.ksp
+    alias libs.plugins.hilt
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
 }
 
 android {
     compileSdk 33
+    namespace "com.schinizer.hackernews"
 
     defaultConfig {
         applicationId "com.schinizer.hackernews"
@@ -26,7 +27,15 @@ android {
         release {
             signingConfig signingConfigs.debug
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        benchmark {
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
+            matchingFallbacks = ['release']
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'benchmark-rules.pro'
         }
     }
     compileOptions {
@@ -37,42 +46,52 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
-        viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 }
 
 dependencies {
-    implementation project(":ui")
     implementation project(":data")
     implementation project(":business")
+    implementation project(":compose")
 
-    implementation "androidx.core:core-ktx:$core_ktx"
-    implementation "androidx.appcompat:appcompat:$appcompat"
-    implementation 'androidx.fragment:fragment-ktx:1.5.2'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation libs.kotlinx.collections.immutable
 
-    implementation "com.google.android.material:material:$material"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.fragment
+    implementation libs.androidx.lifecycle.runtime.ktx
 
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation "androidx.browser:browser:1.4.0"
+    implementation libs.android.material
 
-    implementation "com.airbnb.android:epoxy:$epoxy"
-    ksp "com.airbnb.android:epoxy-processor:$epoxy"
+    implementation libs.androidx.browser
 
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation libs.compose.ui
+    // Tooling support (Previews, etc.)
+    implementation libs.compose.ui.tooling
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation libs.compose.foundation
+    // Material Design
+    implementation libs.compose.material3
+    // Integration with activities
+    implementation libs.androidx.activity.compose
+    // Integration with ViewModels
+    implementation libs.androidx.lifecycle.viewmodel.compose
 
-    debugImplementation "com.facebook.flipper:flipper:$flipper"
-    releaseImplementation "com.facebook.flipper:flipper-noop:$flipper"
-    debugImplementation "com.facebook.flipper:flipper-network-plugin:$flipper"
-    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
+    implementation libs.dagger.hilt.android
+    kapt libs.dagger.hilt.compiler
 
-    implementation 'com.github.yogacp:android-viewbinding:1.0.4'
+    debugImplementation libs.bundles.flipper.debug
+    releaseImplementation libs.bundles.flipper.noop
 
-    testImplementation "junit:junit:$junit"
-    androidTestImplementation "androidx.test.ext:junit:1.1.3"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    implementation libs.androidx.profileinstaller
+
+    testImplementation libs.bundles.unitTest
+    androidTestImplementation libs.bundles.integrationTest
 }
 
 kapt {

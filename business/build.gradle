@@ -1,9 +1,9 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id "com.google.devtools.ksp"
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.ksp
+    alias libs.plugins.hilt
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -30,30 +30,22 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    namespace 'com.schinizer.hackernews.business'
 }
 
 dependencies {
     implementation project(":data")
 
-    implementation "androidx.core:core-ktx:$core_ktx"
-    implementation "androidx.appcompat:appcompat:$appcompat"
-    implementation "com.google.android.material:material:$material"
+    implementation libs.kotlinx.coroutines
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+    implementation libs.dagger.hilt.android
+    kapt libs.dagger.hilt.compiler
 
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.kotlinx.collections.immutable
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewmodel_ktx"
-
-    testImplementation "junit:junit:$junit"
-    testImplementation "com.google.truth:truth:$truth"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines"
-    testImplementation "io.mockk:mockk:$mockk"
-    testImplementation "app.cash.turbine:turbine:$turbine"
-
-    androidTestImplementation "androidx.test.ext:junit:1.1.3"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    testImplementation libs.bundles.unitTest
+    androidTestImplementation libs.bundles.integrationTest
 }
 
 kapt {

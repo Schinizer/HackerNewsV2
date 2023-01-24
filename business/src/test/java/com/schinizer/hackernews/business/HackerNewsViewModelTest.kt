@@ -4,6 +4,7 @@ package com.schinizer.hackernews.business
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.schinizer.hackernews.data.HackerNewsRepository
+import com.schinizer.hackernews.data.local.ItemState
 import com.schinizer.hackernews.data.remote.Item
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
@@ -65,8 +66,9 @@ class HackerNewsViewModelTest {
             assertThat(expectMostRecentItem()).isFalse()
         }
         viewmodel.dataFlow.test {
-            val expected = viewmodel.itemOrder.map { HackerNewsViewModel.ItemState(it, null) }
-            assertThat(expectMostRecentItem()).isEqualTo(expected)
+            val expected = viewmodel.itemOrder.map { ItemState(id = it) }
+            val actual = expectMostRecentItem().map { ItemState(id = it.id) }
+            assertThat(actual).isEqualTo(expected)
         }
     }
 
@@ -88,8 +90,9 @@ class HackerNewsViewModelTest {
         assertThat(viewmodel.data[id]).isEqualTo(item)
 
         viewmodel.dataFlow.test {
-            val expected = listOf(HackerNewsViewModel.ItemState(id, item))
-            assertThat(expectMostRecentItem()).isEqualTo(expected)
+            val expected = listOf(ItemState(id = id))
+            val actual = expectMostRecentItem().map { ItemState(id = it.id) }
+            assertThat(actual).isEqualTo(expected)
         }
     }
 
@@ -120,7 +123,6 @@ class HackerNewsViewModelTest {
             data.put(id, item)
         }
 
-
         viewmodel.actionFlow.test {
             viewmodel.openItem(id)
             val expected = HackerNewsViewModel.OpenBrowser(url)
@@ -139,7 +141,7 @@ class HackerNewsViewModelTest {
 
         viewmodel.actionFlow.test {
             viewmodel.openItem(id)
-            val expected =HackerNewsViewModel.ShowUnsupportedSnackBar
+            val expected = HackerNewsViewModel.ShowUnsupportedSnackBar
             assertThat(expectMostRecentItem()).isEqualTo(expected)
         }
     }
