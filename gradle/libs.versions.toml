@@ -40,6 +40,7 @@ mockk = "1.13.3"
 junit = "4.13.2"
 truth = "1.1.3"
 turbine = "0.12.1"
+paparazzi = "1.2.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
@@ -119,3 +120,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi"}

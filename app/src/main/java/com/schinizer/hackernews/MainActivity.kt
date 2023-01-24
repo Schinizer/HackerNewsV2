@@ -1,6 +1,7 @@
 package com.schinizer.hackernews
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -16,10 +17,12 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -50,7 +53,10 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             MaterialTheme(
-                colorScheme = darkColorScheme()
+                colorScheme = when(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    true -> dynamicDarkColorScheme(LocalContext.current)
+                    else -> darkColorScheme()
+                }
             ) {
                 val snackbarHostState = remember { SnackbarHostState() }
 
