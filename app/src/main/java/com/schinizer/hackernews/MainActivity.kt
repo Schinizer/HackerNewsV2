@@ -2,7 +2,6 @@ package com.schinizer.hackernews
 
 import android.net.Uri
 import android.os.Bundle
-import android.viewbinding.library.activity.viewBinding
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,26 +11,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.snackbar.Snackbar
 import com.schinizer.hackernews.business.HackerNewsViewModel
 import com.schinizer.hackernews.data.dagger.DispatcherModule
-import com.schinizer.hackernews.databinding.ActivityMainBinding
 import com.schinizer.hackernews.ui.compose.measureCompositionTime
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -43,7 +41,6 @@ class MainActivity : AppCompatActivity() {
     @DispatcherModule.UI
     lateinit var ui: CoroutineDispatcher
 
-    private val binding by viewBinding<ActivityMainBinding>()
     private val viewModel by viewModels<HackerNewsViewModel>()
 
     @OptIn(ExperimentalComposeUiApi::class)
@@ -55,6 +52,8 @@ class MainActivity : AppCompatActivity() {
             MaterialTheme(
                 colorScheme = darkColorScheme()
             ) {
+                val snackbarHostState = remember { SnackbarHostState() }
+
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
@@ -64,6 +63,7 @@ class MainActivity : AppCompatActivity() {
                             // so that it's enabled for the whole subtree
                             testTagsAsResourceId = true
                         },
+                    snackbarHost = { SnackbarHost(snackbarHostState) },
                     topBar = {
                         TopAppBar(
                             title = {
@@ -82,24 +82,18 @@ class MainActivity : AppCompatActivity() {
                         vm = viewModel
                     )
                 }
-            }
-        }
 
-        lifecycleScope.launch(ui) {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.actionFlow
-                    .collect {
-                        when (it) {
-                            is HackerNewsViewModel.OpenBrowser -> openInChrome(it.url)
-                            is HackerNewsViewModel.ShowUnsupportedSnackBar -> Snackbar.make(
-                                this@MainActivity,
-                                binding.recyclerView,
-                                "No support yet for this item :)",
-                                Snackbar.LENGTH_SHORT
-                            )
-                                .show()
+                LaunchedEffect(key1 = LocalLifecycleOwner.current) {
+                    viewModel.actionFlow
+                        .collect {
+                            when (it) {
+                                is HackerNewsViewModel.OpenBrowser -> openInChrome(it.url)
+                                is HackerNewsViewModel.ShowUnsupportedSnackBar -> snackbarHostState.showSnackbar(
+                                    message = "No support yet for this item :)"
+                                )
+                            }
                         }
-                    }
+                }
             }
         }
 

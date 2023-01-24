@@ -5,6 +5,7 @@ import android.text.format.DateUtils
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.items
@@ -14,6 +15,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -23,9 +25,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.platform.debugInspectorInfo
+import androidx.compose.ui.tooling.preview.Preview
 import com.schinizer.hackernews.data.local.ItemState
 import com.schinizer.hackernews.data.remote.Item
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
@@ -158,3 +162,16 @@ fun Modifier.measureCompositionTime(
         this
     }
 )
+
+@Preview
+@Composable
+fun ItemViewListPreview() {
+    val itemStates = Array(8) { ItemState(it, null) {} }
+
+    MaterialTheme(colorScheme = darkColorScheme()) {
+        ItemViewListStateless(
+            modifier = Modifier.fillMaxSize(),
+            itemStates = persistentListOf(*itemStates)
+        )
+    }
+}

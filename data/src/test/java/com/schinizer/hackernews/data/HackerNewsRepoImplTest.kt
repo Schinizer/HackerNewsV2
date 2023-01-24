@@ -64,7 +64,7 @@ class HackerNewsRepoImplTest {
     @Test
     fun `fetchItem success from remote`() = runTest {
         val id = random.nextInt()
-        val item = mockk<Item>(relaxed = true)
+        val item = mockk<Item.Unsupported>(relaxed = true)
         coEvery { remote.fetchItem(id) } returns item
 
         val result = repo.fetchItem(id)
@@ -79,7 +79,7 @@ class HackerNewsRepoImplTest {
     @Test
     fun `fetchItem failed remote will return local`() = runTest {
         val id = random.nextInt()
-        val item = mockk<Item>(relaxed = true)
+        val item = mockk<Item.Unsupported>(relaxed = true)
         val exception = RuntimeException("heh")
         coEvery { remote.fetchItem(id) } throws exception
         coEvery { local.fetchItem(id) } returns item

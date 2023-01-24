@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -89,23 +90,29 @@ fun ItemLoading(
 @Preview
 @Composable
 fun ItemViewPreview() {
-    ItemView(
-        modifier = Modifier.fillMaxWidth()
-    )
+    MaterialTheme(colorScheme = darkColorScheme()) {
+        ItemView(
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Preview
 @Composable
 fun ItemViewUnsupportedPreview() {
-    ItemUnsupported(
-        modifier = Modifier.fillMaxWidth()
-    )
+    MaterialTheme(colorScheme = darkColorScheme()) {
+        ItemUnsupported(
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Preview
 @Composable
 fun ItemLoadingPreview() {
-    ItemLoading(
-        modifier = Modifier.fillMaxWidth()
-    )
+    MaterialTheme(colorScheme = darkColorScheme()) {
+        ItemLoading(
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
