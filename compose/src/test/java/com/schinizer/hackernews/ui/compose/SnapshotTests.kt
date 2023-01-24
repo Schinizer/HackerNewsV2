@@ -14,8 +14,6 @@ class SnapshotTests {
     fun itemView() {
         paparazzi.snapshot {
             ItemViewPreview()
-            ItemViewUnsupportedPreview()
-            ItemLoadingPreview()
         }
     }
 
@@ -23,7 +21,6 @@ class SnapshotTests {
     fun itemViewUnsupportedPreview() {
         paparazzi.snapshot {
             ItemViewUnsupportedPreview()
-            ItemLoadingPreview()
         }
     }
 
