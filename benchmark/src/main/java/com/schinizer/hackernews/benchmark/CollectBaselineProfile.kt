@@ -8,7 +8,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalBaselineProfilesApi::class)
-class BaselineProfileBenchmark {
+class CollectBaselineProfile {
     @get:Rule
     val baselineProfileRule = BaselineProfileRule()
 
