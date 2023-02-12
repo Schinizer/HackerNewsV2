@@ -35,10 +35,10 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
     fun startupFullCompilation() = startup(CompilationMode.Full())
 
     private fun startup(compilationMode: CompilationMode) = benchmarkRule.measureRepeated(
-        packageName = "com.schinizer.hackernews",
+        packageName = TARGET_PACKAGE,
         metrics = listOf(StartupTimingMetric()),
         compilationMode = compilationMode,
-        iterations = 10,
+        iterations = DEFAULT_ITERATIONS,
         startupMode = startupMode,
         setupBlock = {
             pressHome()

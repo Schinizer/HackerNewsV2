@@ -75,8 +75,7 @@ fun ItemViewListStateless(
                         ItemView(
                             modifier = Modifier
                                 .fillParentMaxWidth()
-                                .animateItemPlacement()
-                                .measureCompositionTime("ItemView"),
+                                .animateItemPlacement(),
                             title = item.title,
                             subtitle = "${item.score} points by ${item.by} | $timeAgo",
                             onClick = onClick

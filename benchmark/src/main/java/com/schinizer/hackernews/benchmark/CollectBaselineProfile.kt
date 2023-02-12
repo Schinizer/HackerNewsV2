@@ -14,7 +14,7 @@ class CollectBaselineProfile {
 
     @Test
     fun startup() = baselineProfileRule.collectBaselineProfile(
-        packageName = "com.schinizer.hackernews",
+        packageName = TARGET_PACKAGE,
         profileBlock = {
             startActivityAndWait()
             with(device) {
