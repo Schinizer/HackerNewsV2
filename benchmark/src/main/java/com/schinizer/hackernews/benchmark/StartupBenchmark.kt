@@ -28,8 +28,11 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
     )
 
     @Test
-    fun startupPartialWithBaselineProfiles() =
-        startup(CompilationMode.Partial(baselineProfileMode = BaselineProfileMode.Require))
+    fun startupPartialWithBaselineProfiles() = startup(
+        CompilationMode.Partial(
+            baselineProfileMode = BaselineProfileMode.Require
+        )
+    )
 
     @Test
     fun startupFullCompilation() = startup(CompilationMode.Full())
