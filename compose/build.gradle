@@ -62,8 +62,6 @@ dependencies {
 
     implementation libs.compose.shimmer
 
-    implementation libs.compose.tracing
-
     implementation libs.kotlinx.collections.immutable
 
     // UI Tests
