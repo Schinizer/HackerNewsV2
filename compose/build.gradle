@@ -64,6 +64,8 @@ dependencies {
 
     implementation libs.kotlinx.collections.immutable
 
+    lintChecks libs.compose.linter
+
     // UI Tests
     testImplementation libs.bundles.unitTest
     androidTestImplementation libs.bundles.integrationTest

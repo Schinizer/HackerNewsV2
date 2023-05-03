@@ -15,7 +15,7 @@ class ComposeTracer : Initializer<Unit> {
     override fun create(context: Context) {
         Composer.setTracer(object : CompositionTracer {
             override fun traceEventStart(key: Int, dirty1: Int, dirty2: Int, info: String) =
-                Trace.beginSection(info.take(127))
+                Trace.beginSection(info.takeLast(127))
             override fun traceEventEnd() = Trace.endSection()
             override fun isTraceInProgress(): Boolean = Trace.isEnabled()
         })

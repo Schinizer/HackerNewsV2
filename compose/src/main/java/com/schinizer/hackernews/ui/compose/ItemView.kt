@@ -33,7 +33,6 @@ fun ItemView(
                 onClick = onClick
             )
             .padding(all = 16.dp)
-            .height(IntrinsicSize.Min)
     ) {
         Text(
             text = title,
@@ -57,8 +56,7 @@ fun ItemUnsupported(
 ) {
     Text(
         modifier = modifier
-            .padding(all = 16.dp)
-            .height(IntrinsicSize.Min),
+            .padding(all = 16.dp),
         text = title,
         color = MaterialTheme.colorScheme.primary,
         style = MaterialTheme.typography.titleLarge,
@@ -69,27 +67,25 @@ fun ItemUnsupported(
 fun ItemLoading(
     modifier: Modifier = Modifier
 ) {
+    val thickness = 22.dp
+    val color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.25f)
+    val spacingHeight = 8.dp
+
     Column(
         modifier = modifier
             .padding(all = 16.dp)
     ) {
-        val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.View)
-
-        val thickness = 22.dp
-        val color = MaterialTheme.colorScheme.tertiary
-        val spacingHeight = 8.dp
-
-        Divider(color = color, thickness = thickness, modifier = Modifier.shimmer(shimmerInstance))
+        Divider(thickness = thickness, color = color)
         Spacer(modifier = Modifier.height(spacingHeight))
-        Divider(color = color, thickness = thickness, modifier = Modifier.shimmer(shimmerInstance))
+        Divider(thickness = thickness, color = color)
         Spacer(modifier = Modifier.height(spacingHeight))
-        Divider(color = color, thickness = thickness, modifier = Modifier.shimmer(shimmerInstance))
+        Divider(thickness = thickness, color = color)
     }
 }
 
 @Preview
 @Composable
-fun ItemViewPreview() {
+private fun ItemViewPreview() {
     MaterialTheme(colorScheme = darkColorScheme()) {
         ItemView(
             modifier = Modifier.fillMaxWidth()
@@ -99,7 +95,7 @@ fun ItemViewPreview() {
 
 @Preview
 @Composable
-fun ItemViewUnsupportedPreview() {
+private fun ItemViewUnsupportedPreview() {
     MaterialTheme(colorScheme = darkColorScheme()) {
         ItemUnsupported(
             modifier = Modifier.fillMaxWidth()
@@ -109,7 +105,7 @@ fun ItemViewUnsupportedPreview() {
 
 @Preview
 @Composable
-fun ItemLoadingPreview() {
+private fun ItemLoadingPreview() {
     MaterialTheme(colorScheme = darkColorScheme()) {
         ItemLoading(
             modifier = Modifier.fillMaxWidth()

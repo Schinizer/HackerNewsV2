@@ -35,8 +35,8 @@ import java.util.concurrent.TimeUnit
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ItemViewListStateless(
-    modifier: Modifier = Modifier,
     itemStates: ImmutableList<ItemState>,
+    modifier: Modifier = Modifier,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     onItemAttached: (id: Int) -> Unit = {},
@@ -54,15 +54,13 @@ fun ItemViewListStateless(
         ) {
             items(
                 items = itemStates,
-                contentType = { it.item },
-                key = { it.id }
+                key = { it.id },
+                contentType = { it.item }
             ) { (_, item, onClick) ->
                 when(item) {
                     null -> {
                         ItemLoading(
-                            modifier = Modifier
-                                .fillParentMaxWidth()
-                                .animateItemPlacement(),
+                            modifier = Modifier.animateItemPlacement()
                         )
                     }
                     is Item.Story -> {
@@ -72,20 +70,18 @@ fun ItemViewListStateless(
                             now,
                             DateUtils.MINUTE_IN_MILLIS
                         )
+                        val subtitle = "${item.score} points by ${item.by} | $timeAgo"
+
                         ItemView(
-                            modifier = Modifier
-                                .fillParentMaxWidth()
-                                .animateItemPlacement(),
+                            modifier = Modifier.animateItemPlacement(),
                             title = item.title,
-                            subtitle = "${item.score} points by ${item.by} | $timeAgo",
+                            subtitle = subtitle,
                             onClick = onClick
                         )
                     }
                     is Item.Job -> {
                         ItemView(
-                            modifier = Modifier
-                                .fillParentMaxWidth()
-                                .animateItemPlacement(),
+                            modifier = Modifier.animateItemPlacement(),
                             title = item.title,
                             subtitle = "",
                             onClick = onClick
@@ -93,9 +89,7 @@ fun ItemViewListStateless(
                     }
                     is Item.Unsupported -> {
                         ItemUnsupported(
-                            modifier = Modifier
-                                .fillParentMaxWidth()
-                                .animateItemPlacement(),
+                            modifier = Modifier.animateItemPlacement()
                         )
                     }
                 }
@@ -164,7 +158,7 @@ fun Modifier.measureCompositionTime(
 
 @Preview
 @Composable
-fun ItemViewListPreview() {
+private fun ItemViewListPreview() {
     val itemStates = Array(8) { ItemState(it, null) {} }
 
     MaterialTheme(colorScheme = darkColorScheme()) {

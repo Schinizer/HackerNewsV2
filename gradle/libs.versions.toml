@@ -1,6 +1,6 @@
 [versions]
 jvmTarget = "17"
-agp = "8.2.0-alpha01"
+agp = "8.2.0-alpha02"
 kotlin = "1.8.20"
 ksp = "1.8.20-1.0.11"
 
@@ -26,6 +26,7 @@ compose-compiler = "1.4.6"
 compose-ui-test = "1.4.2"
 compose-tracing = "1.0.0-alpha03"
 compose-shimmer = "1.0.4"
+compose-linter = "1.2.0"
 
 accompanist = "0.28.0"
 
@@ -83,6 +84,7 @@ compose-tracing = { group = "androidx.compose.runtime", name = "runtime-tracing"
 compose-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose-ui-test"}
 
 compose-shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version.ref = "compose-shimmer" }
+compose-linter = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "compose-linter"}
 
 dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
