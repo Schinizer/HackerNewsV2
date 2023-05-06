@@ -59,9 +59,7 @@ fun ItemViewListStateless(
             ) { (_, item, onClick) ->
                 when(item) {
                     null -> {
-                        ItemLoading(
-                            modifier = Modifier.animateItemPlacement()
-                        )
+                        ItemLoading()
                     }
                     is Item.Story -> {
                         val now = System.currentTimeMillis()

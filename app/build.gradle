@@ -84,6 +84,7 @@ dependencies {
     implementation libs.androidx.activity.compose
     // Integration with ViewModels
     implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.lifecycle.runtime.compose
 
     implementation libs.dagger.hilt.android
     kapt libs.dagger.hilt.compiler

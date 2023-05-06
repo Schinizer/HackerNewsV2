@@ -1,8 +1,8 @@
 package com.schinizer.hackernews.ui.compose
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,12 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.valentinilk.shimmer.ShimmerBounds
-import com.valentinilk.shimmer.rememberShimmer
-import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun ItemView(
@@ -83,6 +82,42 @@ fun ItemLoading(
     }
 }
 
+@Composable
+fun ItemLoadingCanvas(
+    modifier: Modifier = Modifier
+) {
+    val numOfLines = 3
+    val numOfSpacing = numOfLines - 1
+    val padding = 16.dp
+    val thickness = 22.dp
+    val color = MaterialTheme.colorScheme.tertiary
+    val spacingHeight = 8.dp
+
+    val finalHeight = thickness * numOfLines + spacingHeight * numOfSpacing + padding * 2
+
+    Canvas(
+        modifier = modifier
+            .height(finalHeight)
+            .fillMaxWidth()
+            .padding(all = padding)
+    ) {
+        val rectSize = Size(size.width, thickness.toPx())
+        var offset = Offset.Zero
+
+        for(i in 0 until numOfLines) {
+            drawRect(
+                color = color,
+                topLeft = offset,
+                size = rectSize,
+                alpha = 0.25f
+            )
+
+            offset += Offset(0f, (thickness + spacingHeight).toPx())
+        }
+
+    }
+}
+
 @Preview
 @Composable
 private fun ItemViewPreview() {
@@ -108,6 +143,16 @@ private fun ItemViewUnsupportedPreview() {
 private fun ItemLoadingPreview() {
     MaterialTheme(colorScheme = darkColorScheme()) {
         ItemLoading(
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ItemLoadingCanvasPreview() {
+    MaterialTheme(colorScheme = darkColorScheme()) {
+        ItemLoadingCanvas(
             modifier = Modifier.fillMaxWidth()
         )
     }
