@@ -1,4 +1,4 @@
-pluginManagement {
+pluginManagement  {
     repositories {
         gradlePluginPortal()
         google()
@@ -10,13 +10,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
+        maven(url = "https://jitpack.io")
     }
 }
 rootProject.name = "HackerNewsV2"
-include ':app'
-include ':data'
-include ':business'
-include ':compose'
-include ':benchmark'
-include ':compose-tracer'
+include(":app")
+include(":data")
+include(":business")
+include(":compose")
+include(":benchmark")
+include(":compose-tracer")

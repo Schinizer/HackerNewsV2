@@ -1,4 +1,4 @@
-package com.schinizer.hackernews
+package com.schinizer.hackernews.composetracer
 
 import android.content.Context
 import androidx.compose.runtime.Composer

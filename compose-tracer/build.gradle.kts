@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.schinizer.hackernews"
+    namespace = "com.schinizer.hackernews.composetracer"
     compileSdk = 33
 
     defaultConfig {

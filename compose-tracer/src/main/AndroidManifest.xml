@@ -7,7 +7,7 @@
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
             tools:node="merge">
-            <meta-data android:name="com.schinizer.hackernews.ComposeTracer"
+            <meta-data android:name="com.schinizer.hackernews.composetracer.ComposeTracer"
                 android:value="androidx.startup" />
         </provider>
     </application>
