@@ -1,8 +1,6 @@
 package com.schinizer.hackernews.ui.compose
 
-import android.os.SystemClock
 import android.text.format.DateUtils
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,19 +16,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.tooling.preview.Preview
 import com.schinizer.hackernews.data.local.ItemState
 import com.schinizer.hackernews.data.remote.Item
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -49,7 +45,7 @@ fun ItemViewListStateless(
         modifier = modifier.pullRefresh(pullRefreshState)
     ) {
         LazyColumn(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxSize(),
             state = lazyColumnState
         ) {
             items(
@@ -64,7 +60,7 @@ fun ItemViewListStateless(
                     is Item.Story -> {
                         val now = System.currentTimeMillis()
                         val timeAgo = DateUtils.getRelativeTimeSpanString(
-                            TimeUnit.SECONDS.toMillis(item.time),
+                            item.time.seconds.inWholeMilliseconds,
                             now,
                             DateUtils.MINUTE_IN_MILLIS
                         )
@@ -107,6 +103,7 @@ fun ItemViewListStateless(
 
     LaunchedEffect(itemStates) {
         snapshotFlow { lazyColumnState.layoutInfo.visibleItemsInfo }
+            .distinctUntilChangedBy { info -> info.map { it.index } }
             .collect { freshVisibleItemsInfo ->
                 // remove existing views will result in views that detached
                 for(info in freshVisibleItemsInfo) {
@@ -117,7 +114,7 @@ fun ItemViewListStateless(
 
                     currentVisibleItemsInfo.remove(info.index)
                 }
-                
+
                 // Cancel all items that doesnt need loading
                 for((_, info) in currentVisibleItemsInfo) {
                     itemStates.getOrNull(info.index)?.let { onItemDetached(it.id) }
@@ -134,30 +131,10 @@ fun ItemViewListStateless(
     }
 }
 
-fun Modifier.measureCompositionTime(
-    key: String,
-    currentTime: () -> Long = SystemClock::uptimeMillis,
-    timeUnit: TimeUnit = TimeUnit.MILLISECONDS
-) = composed(
-    inspectorInfo = debugInspectorInfo {
-        name = "measureCompositionTime"
-        value = key
-    },
-    factory = {
-        val startTime = currentTime()
-
-        SideEffect {
-            val estimatedTime = currentTime() - startTime
-            Log.d("$key()", "measureCompositionTime() Side effect took in ms = ${timeUnit.toMillis(estimatedTime)}")
-        }
-        this
-    }
-)
-
 @Preview
 @Composable
 private fun ItemViewListPreview() {
-    val itemStates = Array(8) { ItemState(it, null) {} }
+    val itemStates = Array(8) { ItemState(it, null) }
 
     MaterialTheme(colorScheme = darkColorScheme()) {
         ItemViewListStateless(
