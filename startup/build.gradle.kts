@@ -1,14 +1,15 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
-    namespace = "com.schinizer.hackernews.composetracer"
+    namespace = "com.schinizer.hackernews.startup"
     compileSdk = 33
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -16,6 +17,7 @@ android {
 
     buildTypes {
         release {
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -27,14 +29,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = libs.versions.jvmTarget.get()
     }
 }
 
 dependencies {
-    implementation(platform(libs.compose.bom))
     implementation(libs.androidx.startup)
-    implementation(libs.androidx.tracing)
-    implementation(libs.androidx.tracing.ktx)
-    implementation(libs.compose.runtime)
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.dagger.hilt.compiler)
+    debugImplementation(libs.bundles.flipper.debug)
 }

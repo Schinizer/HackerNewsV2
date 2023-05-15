@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.android.blp) apply false
 }
 
 subprojects {
@@ -20,9 +21,9 @@ subprojects {
                     if (project.findProperty("hackernews.enableComposeCompilerReports") == "true") {
                         freeCompilerArgs = freeCompilerArgs + listOf(
                             "-P",
-                            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir.absolutePath}/compose_metrics",
+                            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir.absolutePath}/compose_metrics/metric",
                             "-P",
-                            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_metrics",
+                            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_metrics/report",
                         )
                     }
                 }

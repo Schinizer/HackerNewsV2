@@ -5,27 +5,20 @@ import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.StartupTimingMetric
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4ClassRunner::class)
-class ColdStartupBenchmark : AbstractStartupBenchmark(StartupMode.COLD)
-abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
+@RunWith(AndroidJUnit4::class)
+@LargeTest
+class StartupBenchmarks {
     @get:Rule
     val benchmarkRule = MacrobenchmarkRule()
 
     @Test
     fun startupNoCompilation() = startup(CompilationMode.None())
-
-    @Test
-    fun startupPartialCompilation() = startup(
-        CompilationMode.Partial(
-            baselineProfileMode = BaselineProfileMode.Disable,
-            warmupIterations = 3
-        )
-    )
 
     @Test
     fun startupPartialWithBaselineProfiles() = startup(
@@ -34,15 +27,12 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
         )
     )
 
-    @Test
-    fun startupFullCompilation() = startup(CompilationMode.Full())
-
     private fun startup(compilationMode: CompilationMode) = benchmarkRule.measureRepeated(
         packageName = TARGET_PACKAGE,
         metrics = listOf(StartupTimingMetric()),
         compilationMode = compilationMode,
         iterations = DEFAULT_ITERATIONS,
-        startupMode = startupMode,
+        startupMode = StartupMode.COLD,
         setupBlock = {
             pressHome()
         }

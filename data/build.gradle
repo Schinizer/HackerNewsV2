@@ -61,7 +61,6 @@ dependencies {
     implementation libs.compose.runtime
 
     debugImplementation libs.bundles.flipper.debug
-    releaseImplementation libs.bundles.flipper.noop
 
     testImplementation libs.bundles.unitTest
     androidTestImplementation libs.bundles.integrationTest
