@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.ManagedVirtualDevice
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.test)
@@ -8,20 +9,22 @@ plugins {
 
 android {
     namespace = "com.schinizer.hackernews.profilegenerator"
-    compileSdk = 33
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_21
+        }
     }
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 33
+        targetSdk = libs.versions.targetSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

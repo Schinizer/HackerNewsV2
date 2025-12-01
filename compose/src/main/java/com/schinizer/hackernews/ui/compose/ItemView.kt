@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
@@ -74,11 +74,11 @@ fun ItemLoading(
         modifier = modifier
             .padding(all = 16.dp)
     ) {
-        Divider(thickness = thickness, color = color)
+        HorizontalDivider(thickness = thickness, color = color)
         Spacer(modifier = Modifier.height(spacingHeight))
-        Divider(thickness = thickness, color = color)
+        HorizontalDivider(thickness = thickness, color = color)
         Spacer(modifier = Modifier.height(spacingHeight))
-        Divider(thickness = thickness, color = color)
+        HorizontalDivider(thickness = thickness, color = color)
     }
 }
 
@@ -104,7 +104,7 @@ fun ItemLoadingCanvas(
         val rectSize = Size(size.width, thickness.toPx())
         var offset = Offset.Zero
 
-        for(i in 0 until numOfLines) {
+        repeat(numOfLines) {
             drawRect(
                 color = color,
                 topLeft = offset,

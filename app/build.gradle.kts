@@ -1,20 +1,22 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.blp)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    id("kotlin-kapt")
+    alias(libs.plugins.kotlin.compose.compiler)
 }
 
 android {
-    compileSdk = 33
+    compileSdk = libs.versions.compileSdk.get().toInt()
     namespace = "com.schinizer.hackernews"
 
     defaultConfig {
         applicationId = "com.schinizer.hackernews"
-        minSdk = 23
-        targetSdk = 33
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -33,18 +35,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_21
+        }
     }
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 }
 
@@ -81,15 +81,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(libs.dagger.hilt.android)
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
 
     implementation(libs.androidx.profileinstaller)
     baselineProfile(project(":baseline-profile"))
 
     testImplementation(libs.bundles.unitTest)
     androidTestImplementation(libs.bundles.integrationTest)
-}
-
-kapt {
-    correctErrorTypes = true
 }

@@ -55,7 +55,7 @@ fun ItemViewListStateless(
             ) { (_, item, onClick) ->
                 when(item) {
                     null -> {
-                        ItemLoading()
+                        ItemLoading(modifier = Modifier.animateItem().fillParentMaxWidth())
                     }
                     is Item.Story -> {
                         val now = System.currentTimeMillis()
@@ -67,7 +67,8 @@ fun ItemViewListStateless(
                         val subtitle = "${item.score} points by ${item.by} | $timeAgo"
 
                         ItemView(
-                            modifier = Modifier.animateItemPlacement(),
+                            modifier = Modifier.animateItem()
+                                .fillParentMaxWidth(),
                             title = item.title,
                             subtitle = subtitle,
                             onClick = onClick
@@ -75,7 +76,8 @@ fun ItemViewListStateless(
                     }
                     is Item.Job -> {
                         ItemView(
-                            modifier = Modifier.animateItemPlacement(),
+                            modifier = Modifier.animateItem()
+                                .fillParentMaxWidth(),
                             title = item.title,
                             subtitle = "",
                             onClick = onClick
@@ -83,7 +85,8 @@ fun ItemViewListStateless(
                     }
                     is Item.Unsupported -> {
                         ItemUnsupported(
-                            modifier = Modifier.animateItemPlacement()
+                            modifier = Modifier.animateItem()
+                                .fillParentMaxWidth()
                         )
                     }
                 }
